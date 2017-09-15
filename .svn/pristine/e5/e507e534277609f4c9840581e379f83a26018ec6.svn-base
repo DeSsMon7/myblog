@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/indexTemplate.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="#{msgs_EN.AppName}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="leftMenuForm">
+            <h:form id="PostViewForm">
+                <p:dataList value="#{postController.items}" var="item" type="definition" itemType="none" rows="5" styleClass="paginated">
+                    <f:facet name="header">
+                        Lastes Posts
+                    </f:facet>
+                    <p:commandLink update=":PostListForm" title="View Detail" styleClass="ui-icon ui-icon-search" style="float:left ; margin-left:  10px">
+                        <f:setPropertyActionListener value="#{item}" target="#{postController.selected}" />
+                        <h:outputText value="#{item.title}, #{item.date}" />
+                    </p:commandLink>
+                    <h:outputText value="#{item.title}, #{item.usersId.username}" style="display:inline-block; margin-right:20px "/>
+                </p:dataList> 
+            </h:form>
+        </ui:define>
+
+
+        <ui:define name="postContent">
+            <h:form id="PostListForm">
+                <p:dataScroller id="datalist" value="#{postController.items}" var="item"  >
+                    <p:panel header="#{item.title}" style="margin: auto ; width: 50% ; padding: 10px">
+                    <h:outputText value="#{item.title}" /> 
+                    <br/>
+                    <h:outputText value="Content: " style="font-weight: bold"/>
+                    <p:spacer height="20px"/>
+                    <h:outputText value="#{item.content}"/>
+                    <br/>
+                    <h:outputText value="Published by " style="font-weight: bold"/>
+                    <h:outputText value="#{item.usersId.username}" style="color: blue"/>
+                    <p:spacer height="20px"/>
+                    <h:outputText value="on" style="font-weight: bold" /> <p:spacer height="10px"/>
+                    <h:outputText value="#{item.date}" style="color: red"/>
+                    <p:separator />
+                    </p:panel>
+                    <br/>
+                    <hr style="width: 100%"/>
+                    <br/>
+                </p:dataScroller>
+            </h:form>    
+        </ui:define>
+
+    </ui:composition>
+</html>
+

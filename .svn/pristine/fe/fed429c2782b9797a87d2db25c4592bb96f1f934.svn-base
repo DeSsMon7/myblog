@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/loginTemplate.xhtml">
+
+
+
+        <ui:define name="header">
+            <div style="float: right ; margin-top: -3px" >
+                <h:form id="loginForm">
+                    <p:commandButton id="loginButton" icon="ui-icon-circle-check"
+                                     value="Вход" oncomplete="PF('UserLoginDialog').show()"
+                                     />
+                    <p:commandButton id="registerButton" icon="ui-icon-plus"  
+                                     value="Регистрация" action="#{userController.prepareCreate(event)}" 
+                                     oncomplete="PF('UserRegisterDialog').show()" />
+                </h:form>
+
+                <p:dialog showEffect="fade"
+                          id="UserLoginDlg" 
+                          widgetVar="UserLoginDialog" 
+                          modal="true" 
+                          resizable="false" 
+                          appendTo="@(body)" 
+                          header="#{msgs_en.CreateUserTitle}">
+                    <h:form id="UserLoginForm">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" >
+                                <p:outputLabel for="username" value="Потребителско Име:"/>
+                                <p:inputText id="username" required="true" 
+                                             requiredMessage="Моля въведете потребителско име" 
+                                             value="#{login.username}"/>
+
+                                <h:outputLabel  for="pwd1" value="Парола:"/>
+                                <p:password id="pwd1"
+                                            required="true"
+                                            value="#{login.password}" 
+                                            label="Password" 
+                                            requiredMessage="Моля въведете парола"/>
+                            </p:panelGrid>
+                            <p:commandButton action="#{login.validateUsernamePassword}" value="Вход" update="display,:growl" oncomplete="handleSubmit(args,'UserLoginDialog');"/>
+                            <p:commandButton value="Cancel" onclick="UserLoginDialog.hide()"/>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog showEffect="fade"
+                          id="UserRegisterDlg" 
+                          widgetVar="UserRegisterDialog" 
+                          modal="true" 
+                          resizable="false" 
+                          appendTo="@(body)" 
+                          header="#{msgs_en.CreateUserTitle}">
+                    <h:form id="UserRegisterForm">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" >
+                                <p:outputLabel value="Username" for="userLogin" />
+                                <p:inputText id="userLogin" 
+                                             required="true" 
+                                             requiredMessage="Моля въведете потребителско име!" 
+                                             value="#{userController.selected.username}" 
+                                             title="Username">
+                                    <f:validateLength minimum="3" maximum="10" />
+                                </p:inputText>
+
+                                <p:outputLabel value="Password" for="userPassword" />
+                                <p:password match="pwd2" 
+                                            id="userPassword" 
+                                            required="true" 
+                                            requiredMessage="Моля въведете парола!" 
+                                            value="#{userController.selected.password}" 
+                                            title="password" >
+                                    <f:validateLength minimum="6" maximum="15"/>
+                                </p:password>
+
+                                <h:outputLabel  for="pwd2" value="Повторете паролата: *" />
+                                <p:password id="pwd2"
+                                            value="#{userController.selected.password}" 
+                                            label="Password 2" 
+                                            required="true" 
+                                            requiredMessage="Моля повторете паролата">
+                                    <f:validateLength minimum="6" maximum="15"/>
+                                </p:password>
+
+
+                            </p:panelGrid>
+                            <p:commandButton actionListener="#{userController.create}" value="Save" update="display,:growl" oncomplete="handleSubmit(args,'UserRegisterDialog');"/>
+                            <p:commandButton value="Cancel" onclick="UserRegisterDialog.hide()"/>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+            </div>
+        </ui:define>
+
+
+        <ui:define name="body">
+            <h:form id="PostListForm">
+                <p:dataScroller id="datalist" value="#{postController.selected}" var="item" >
+                    <p:panel header="#{item.title}"  style="margin: auto ; width: 50% ; padding: 10px; border-style: none " >
+                        <p:spacer height="20px"/>
+                        <h:outputText value="#{item.content}" escape="false"/>
+                        <br/>
+                        <h:outputText value="Published by " style="font-weight: bold"/>
+                        <h:outputText value="#{item.usersId.username}" style="color: blue"/>
+                        <p:spacer height="20px"/>
+                        <h:outputText value="on" style="font-weight: bold" /> <p:spacer height="10px"/>
+                        <h:outputText  value="#{item.postDate}" style="color: red">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                        </h:outputText>
+                        <p:separator />
+                    </p:panel>
+                    <br/>
+                    <hr style="width: 100%"/>
+                    <br/>
+                </p:dataScroller>
+            </h:form>    
+        </ui:define>
+
+
+        <ui:define name="leftMenuForm">
+            <h:form id="PostViewForm">
+                <p:dataList value="#{postController.items}" var="item" type="definition" itemType="none" rows="5" styleClass="paginated">
+                    <f:facet name="header">
+                        Lastes Posts
+                    </f:facet>
+                    <p:commandLink update=":PostListForm" title="View Detail" style="float:left ; margin-left:  10px">
+                        <f:setPropertyActionListener value="#{item}" target="#{postController.selected}" />
+                        <h:outputText  styleClass="ui-icon ui-icon-search" value="#{item.title}, #{item.usersId.username}" />
+                    </p:commandLink>
+                    <h:outputText  value="#{item.title}, #{item.usersId.username}" />
+                </p:dataList> 
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+</html>

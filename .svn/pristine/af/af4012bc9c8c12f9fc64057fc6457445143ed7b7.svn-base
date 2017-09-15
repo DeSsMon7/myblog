@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/loginTemplate.xhtml">
+
+        <ui:define name="body">
+            <p:panel  style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);">
+                <h:form id="loginForm">
+                            <p:panel header="Вход">
+                                <p:panelGrid columns="2">
+                                    <p:outputLabel for="username" value="Потребителско Име:" />
+                                    <p:inputText id="username" required="true" requiredMessage="Моля въведете потребителско име" value="#{login.username}"></p:inputText>
+                                    <h:outputLabel  for="pwd1" value="Парола:" />
+                                    <p:password id="pwd1" required="true" value="#{login.password}"  label="Password"  requiredMessage="Моля въведете парола"/>
+                                    <br />
+                                    <p:commandButton id="loginButton" icon="ui-icon-circle-check" value="Вход" action="#{login.validateUsernamePassword}" update="growl" />
+                                </p:panelGrid>
+                            </p:panel>
+                </h:form>
+                <h:form>
+                    <p:panel>
+                        <p:outputLabel value="Нямате потребителско име ?" style="margin-right: 10px;margin-left: 20px;"/>
+                        <p:commandButton id="registerButton" icon="ui-icon-plus"   value="Регистрация" action="#{userController.prepareCreate(event)}" oncomplete="PF('UserRegisterDialog').show()"/>
+                    </p:panel>
+                </h:form>
+            </p:panel>
+
+            <p:dialog showEffect="fade"
+                      id="UserRegisterDlg" 
+                      widgetVar="UserRegisterDialog" 
+                      modal="true" 
+                      resizable="false" 
+                      appendTo="@(body)" 
+                      header="#{msgs_en.CreateUserTitle}">
+                <h:form id="UserRegisterForm">
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="2" >
+                            <p:outputLabel value="Username" for="userLogin" />
+                            <p:inputText id="userLogin" 
+                                         required="true" 
+                                         requiredMessage="Моля въведете потребителско име!" 
+                                         value="#{userController.selected.username}" 
+                                         title="Username">
+                                <f:validateLength minimum="3" maximum="10" />
+                            </p:inputText>
+
+                            <p:outputLabel value="Password" for="userPassword" />
+                            <p:password match="pwd2" 
+                                        id="userPassword" 
+                                        required="true" 
+                                        requiredMessage="Моля въведете парола!" 
+                                        value="#{userController.selected.password}" 
+                                        title="password" >
+                                <f:validateLength minimum="6" maximum="15"/>
+                            </p:password>
+
+                            <h:outputLabel  for="pwd2" value="Повторете паролата: *" />
+                            <p:password id="pwd2"
+                                        value="#{userController.selected.password}" 
+                                        label="Password 2" 
+                                        required="true" 
+                                        requiredMessage="Моля повторете паролата">
+                                <f:validateLength minimum="6" maximum="15"/>
+                            </p:password>
+                         
+
+                        </p:panelGrid>
+                        <p:commandButton actionListener="#{userController.create}" value="Save" update="display,:growl" oncomplete="handleSubmit(args,'UserRegisterDialog');"/>
+                        <p:commandButton value="Cancel" onclick="UserRegisterDialog.hide()"/>
+                    </h:panelGroup>
+                </h:form>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/indexTemplate.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="#{msgs_EN.AppName}"></h:outputText>
+        </ui:define>
+
+
+
+        <ui:define name="leftMenuForm">
+            <h:form id="PostViewForm">
+                <p:dataList value="#{postController.items}" var="item" type="definition" itemType="none" rows="5" style="display: block">
+                    <f:facet name="header">
+                        Latest Posts
+                    </f:facet>
+                    <p:panelGrid columns="3" style="border-style: hidden">
+                        <p:commandLink  title="#{item.postDate}"  styleClass="ui-icon ui-icon-search" >
+                            <f:setPropertyActionListener  value="#{item}" target="#{postController.selected}" />
+                            <h:outputText  style="float: left"  value="#{item.title}, #{item.usersId.username}" />
+                        </p:commandLink>
+                        <h:outputText value="#{item.title}, #{item.usersId.username}" style=" display:block; " />
+                    </p:panelGrid>
+                </p:dataList> 
+            </h:form>
+        </ui:define>
+
+
+        <ui:define name="postContent">
+            <h:form id="PostListForm">
+                <p:dataScroller id="datalist" value="#{postController.items}" var="item" chunkSize="5" >
+                    <p:panel header="#{item.title}"  style="margin: auto ; width: 50% ; padding: 10px; border-style: none ">
+                        <p:spacer height="20px"/>
+                        <h:panelGrid columns="7" style="float: left; ; display: inline-block">
+                            <span class="ui-icon ui-icon-person" title="Author"/>   
+                            <h:outputText value="#{item.usersId.username} " style="font-weight: 200; font-style: italic"/>
+                            <span class="ui-icon ui-icon-calendar" title="Date"/>
+                            <h:outputText  value="#{item.postDate}" style="color: red">
+                                <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                            </h:outputText>
+                        </h:panelGrid>
+                        <h:outputText value="#{item.content}" escape="false"/>
+                        <br/>
+                        <p:spacer height="15px"/>
+                        <p:separator />
+                    </p:panel>
+                    <br/>
+                    <hr style="width: 100%"/>
+                    <br/>
+                    <f:facet name="loader">
+                        <p:commandButton type="button" value="More" icon="ui-icon-circle-triangle-s"/>
+                    </f:facet>
+                </p:dataScroller>
+            </h:form>    
+        </ui:define>
+    </ui:composition>
+</html>
+

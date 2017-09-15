@@ -1,0 +1,108 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.ash.myblog23.pres;
+
+import com.ash.myblog23.control.PostFacade;
+import com.ash.myblog23.login.beans.SessionUtils;
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.persistence.RollbackException;
+import javax.servlet.http.HttpSession;
+
+/**
+ *
+ * @author Timmy
+ */
+@ManagedBean
+@Named(value = "postBean")
+@SessionScoped
+public class PostBean implements Serializable {
+
+    @Inject
+    PostFacade postFacade;
+
+    private String postTitle;
+    private String postContent;
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    Date postDate = new Date();
+    private Integer userId;
+    private HttpSession session;
+
+    /**
+     * Creates a new instance of PostBean
+     */
+    public PostBean() {
+    }
+
+    public String create() {
+        setPostDate(new Date());
+        dateFormat.format(postDate);
+        System.out.println("Method create invoked!");
+        session = SessionUtils.getSession();
+        userId = (Integer) session.getAttribute("userid");
+        System.out.println("Setting user id as default: " + userId);
+        System.out.println("Извикване на метод за пълнене в базата...");
+ 
+        try {
+            System.out.println("Post Created!" + postDate);
+            postFacade.createPost(postTitle, postContent, postDate, userId);
+            System.out.println("Post Created!" + postDate);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Post Created!", postTitle));
+        } catch (RollbackException e) {
+            System.out.println("Cannot create Post: " + e);
+        }
+        clearForm();
+        return "List.xhtml";
+    }
+
+    private void clearForm() {
+        postTitle = null;
+        postContent = null;
+        postDate = null;
+
+    }
+
+    public String getPostTitle() {
+        return postTitle;
+    }
+
+    public void setPostTitle(String postTitle) {
+        this.postTitle = postTitle;
+    }
+
+    public String getPostContent() {
+        return postContent;
+    }
+
+    public void setPostContent(String postContent) {
+        this.postContent = postContent;
+    }
+
+    public Date getPostDate() {
+        return postDate;
+    }
+
+    public void setPostDate(Date postDate) {
+        this.postDate = postDate;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+}
