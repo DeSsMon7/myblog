@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+
+        <ui:define name="title">
+            <h:outputText value="#{msgs_EN.ListPostTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <h:form id="PostListForm">
+                <p:panel header="#{msgs_EN.ListPostTitle}">
+                    <p:dataTable id="datalist" value="#{postController.items}" var="item"
+                                 selectionMode="single" selection="#{postController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.id}"
+                                 rows="10"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListPostTitle_id}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListPostTitle_title}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.title}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListPostTitle_content}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.content}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListPostTitle_postDate}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.postDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{msgs_EN.ListPostTitle_usersId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.usersId}"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{msgs_EN.Create}" actionListener="#{postController.prepareCreate}" update=":PostCreateForm" oncomplete="PF('PostCreateDialog').show()"/>
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{msgs_EN.View}" update=":PostViewForm" oncomplete="PF('PostViewDialog').show()" disabled="#{empty postController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{msgs_EN.Edit}" update=":PostEditForm" oncomplete="PF('PostEditDialog').show()" disabled="#{empty postController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{msgs_EN.Delete}" actionListener="#{postController.destroy}" update=":growl,datalist" disabled="#{empty postController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+            <ui:include src="Create.xhtml"/>
+            <ui:include src="Edit.xhtml"/>
+            <ui:include src="View.xhtml"/>
+        </ui:define>
+    </ui:composition>
+
+</html>

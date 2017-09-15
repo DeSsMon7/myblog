@@ -1,0 +1,53 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.ash.myblog23.control;
+
+import com.ash.myblog23.model.Comment;
+import java.util.Date;
+import java.util.List;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TemporalType;
+
+/**
+ *
+ * @author Timmy
+ */
+@Stateless
+public class CommentFacade extends AbstractFacade<Comment> {
+
+    @PersistenceContext(unitName = "com.ash_myblog23_war_1.0-SNAPSHOTPU")
+    private EntityManager em;
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
+
+    public CommentFacade() {
+        super(Comment.class);
+    }
+
+    public void createComment(String comment_content, Date comment_date, Integer user_id, Integer post_id) {
+        Query query = em.createNativeQuery("INSERT INTO comment(comment_content, comment_date, user_id, post_id) VALUES (?1, ?2, ?3, ?4)");
+        int updateCount = query
+                .setParameter(1, comment_content)
+                .setParameter(2, comment_date, TemporalType.TIMESTAMP)
+                .setParameter(3, user_id)
+                .setParameter(4, post_id)
+                .executeUpdate();
+    }
+
+    public List findCommentByPostId(Integer post_id) {
+        List result = (List) em.createQuery("SELECT c FROM Comment c WHERE c.postId.id = :postId")
+                .setParameter("postId", post_id)
+                .getResultList();
+        return result;
+    }
+
+}

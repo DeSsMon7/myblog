@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PostCreateDlg" widgetVar="PostCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{msgs_EN.CreatePostTitle}">
+            <h:form id="PostCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{postController.selected != null}">
+                        <p:outputLabel value="#{msgs_EN.CreatePostLabel_title}" for="title" />
+                        <p:inputText id="title" value="#{postController.selected.title}" title="#{msgs_EN.CreatePostTitle_title}" required="true" requiredMessage="#{msgs_EN.CreatePostRequiredMessage_title}"/>
+                        <p:outputLabel value="#{msgs_EN.CreatePostLabel_content}" for="content" />
+                        <p:inputText id="content" value="#{postController.selected.content}" title="#{msgs_EN.CreatePostTitle_content}" required="true" requiredMessage="#{msgs_EN.CreatePostRequiredMessage_content}"/>
+                        <p:outputLabel value="#{msgs_EN.CreatePostLabel_date}" for="date" />
+                        <p:calendar id="date" pattern="MM/dd/yyyy" value="#{postController.selected.postDate}" title="#{msgs_EN.EditPostTitle_date}"  showOn="button"/>
+                        <p:outputLabel value="#{msgs_EN.CreatePostLabel_usersid}" for="usersid"/>
+                        <p:inputText id="usersid" value="#{postController.selected.usersId}" title="#{msgs_EN.CreatePostTitle_usersId}" required="true"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{postController.create}" value="#{msgs_EN.Save}" update="display,:PostListForm:datalist,:growl" oncomplete="handleSubmit(args,'PostCreateDialog');"/>
+                    <p:commandButton value="#{msgs_EN.Cancel}" onclick="PostCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
