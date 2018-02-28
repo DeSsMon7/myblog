@@ -57,5 +57,9 @@ public class UserFacade extends AbstractFacade<User> {
                 .setParameter("username", name)
                 .getResultList();
     }
-    
+    @Override
+    public List<User> findAll() {
+        return em.createQuery("SELECT u FROM User u ORDER BY u.userEmail ASC")
+                .getResultList();
+    }
 }

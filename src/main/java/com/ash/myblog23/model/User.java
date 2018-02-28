@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
     , @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id")
     , @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username")
-    , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")})
+    , @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password")
+    , @NamedQuery(name = "User.findByUserEmail", query = "SELECT u FROM User u WHERE u.userEmail = :userEmail")})
 public class User implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
@@ -55,6 +56,9 @@ public class User implements Serializable {
     @Size(min = 1, max = 2147483647)
     @Column(name = "password")
     private String password;
+    @Size(min = 6, max = 100)
+    @Column(name = "user_email")
+    private String userEmail;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usersId")
     private List<Post> postList;
 
@@ -65,10 +69,11 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public User(Integer id, String username, String password) {
+    public User(Integer id, String username, String password, String userEmail) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.userEmail = userEmail;
     }
 
     public Integer getId() {
@@ -93,6 +98,14 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     @XmlTransient

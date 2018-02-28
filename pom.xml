@@ -4,7 +4,7 @@
 
     <groupId>com.ash</groupId>
     <artifactId>myblog23</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>war</packaging>
 
     <name>myblog23</name>
@@ -44,6 +44,11 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+    <groupId>javax.mail</groupId>
+    <artifactId>javax.mail-api</artifactId>
+    <version>1.6.1</version>
+</dependency>
     </dependencies>
 
     <build>
