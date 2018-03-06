@@ -36,6 +36,7 @@ public class AuthorizationFilter implements Filter {
             if (reqURI.indexOf("/welcome.xhtml") >= 0
                     || (ses != null && ses.getAttribute("username") != null)
                     || reqURI.indexOf("/public/") >= 0
+                    || reqURI.indexOf("/faces/recovery.xhtml") >= 0
                     || reqURI.contains("javax.faces.resource")) {
                 System.out.println("Влизам ли в Chain.DoFilter?");
                 chain.doFilter(request, response);

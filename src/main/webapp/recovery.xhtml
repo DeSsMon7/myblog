@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/recoveryTemplate.xhtml">
+
+        <ui:define name="body" >
+            <h:form id='RecoverForm' style="
+                    margin: auto; width:50%; padding: 10em">
+
+
+                <p:panel header="Възстановяване на забравена парола" style="margin: auto; width:50%; padding: 10em">
+                    <p:spacer rendered="#{!userController.requestRecovery}" height="20"/>
+                    <h:outputText rendered="#{!userController.requestRecovery}" style="font-family: sans-serif; font-size: 1em" value="Невалиден линк за възстановяване на парола!"/>
+                    <p:spacer rendered="#{!userController.requestRecovery}" height="20"/>
+                    <br rendered="#{!userController.requestRecovery}"/>
+                    <br rendered="#{!userController.requestRecovery}"/>
+                    <p:commandButton icon="ui-icon-home" rendered="#{!userController.requestRecovery}" value="Главно меню" action="/index.xhtml?faces-redirect=true"/>
+
+                    <p:spacer rendered="#{userController.successRecovery}" height="20"/>
+                    <h:outputText rendered="#{userController.successRecovery}" style="font-family: sans-serif; font-size: 1em" value="Вашата парола е сменена успешно. Може да опитате да влезете в системата."/>
+                    <p:spacer rendered="#{userController.successRecovery}" height="20"/>
+                    <br rendered="#{userController.successRecovery}"/>
+                    <br rendered="#{userController.successRecovery}"/>
+                    <p:commandButton icon="ui-icon-home" rendered="#{userController.successRecovery}" value="Главно меню" action="/index.xhtml?faces-redirect=true"/>
+
+
+
+
+                    <p:panelGrid rendered="#{userController.formRecovery}" columns="1" style="margin: auto; width:50%; padding: 10em">
+                        <p:graphicImage url="https://i.imgur.com/LCXSYLJ.png" width="70%"/>
+                        <p:spacer height="10"/>
+
+                        <p:password match="pwd2" 
+                                    id="userPassword" 
+                                    placeholder="Въведете нова парола"
+                                    required="true" 
+                                    requiredMessage="Моля въведете парола!" 
+
+                                    feedback="true"
+                                    weakLabel="Слаба" goodLabel="Добра" strongLabel="Силна"
+                                    value="#{userController.selected.password}"> 
+                            <f:validateLength minimum="6" maximum="15"/>
+                        </p:password>
+
+                        <p:password id="pwd2"
+                                    label="Password 2" 
+                                    placeholder="Повторете паролата"
+                                    feedback="true"
+                                    weakLabel="Слаба" goodLabel="Добра" strongLabel="Силна"
+                                    required="true" 
+                                    requiredMessage="Моля повторете паролата"
+                                    value="#{userController.selected.password}">
+                            <f:validateLength minimum="6" maximum="15"/>
+                        </p:password>
+
+                        <p:commandButton icon="ui-icon-pencil" 
+                                         actionListener="#{userController.renewPasswordForgotten}" 
+                                         value="Save" 
+                                         oncomplete="/welcome.xhtml?faces-redirect=true"/>  
+                    </p:panelGrid>
+                </p:panel>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

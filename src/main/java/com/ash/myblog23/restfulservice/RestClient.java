@@ -10,14 +10,14 @@ import javax.ws.rs.client.ClientBuilder;
 /**
  *
  * @author AsH
- */
+ */ 
 
 @Named("RestClient")
 @SessionScoped
 public class RestClient implements Serializable {
         
         private String userNumberField;
-        private final String endPoint = "http://localhost:8080/myblog23/webresources/";
+        private final String endPoint = "http://localhost:8080/myblog23/restfulservice/";
         private final String userResource = "users/";
         
         

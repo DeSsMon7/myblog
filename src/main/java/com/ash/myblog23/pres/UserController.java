@@ -24,6 +24,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -38,13 +39,13 @@ import javax.servlet.http.HttpSession;
 @SessionScoped
 public class UserController implements Serializable {
 
-    @EJB
-    private com.ash.myblog23.control.UserFacade ejbFacade;
+    @Inject
+    UserFacade ejbFacade;
+
     private List<User> items = null;
-    private User selected;
+    private User selected = new User();
     private Integer userId;
     private String username;
-    private static User userRecovery;
     private User userItems;
 
     // Email Settings (Google)
@@ -54,6 +55,12 @@ public class UserController implements Serializable {
     private String userEmail;
     private String userEmailPassword;
     private List<User> userEmails;
+
+    //Recovery Settings
+    private static boolean requestRecovery;
+    private static boolean successRecovery;
+    private static boolean formRecovery;
+    private static User userRecovery;
 
     public UserController() {
     }
@@ -92,10 +99,119 @@ public class UserController implements Serializable {
         return ejbFacade;
     }
 
-    public void clicking() {
-        System.out.println("Clicking on THIS?!?!");
+       public UserFacade getEjbFacade() {
+        return ejbFacade;
     }
 
+    public void setEjbFacade(UserFacade ejbFacade) {
+        this.ejbFacade = ejbFacade;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public static User getUserRecovery() {
+        return userRecovery;
+    }
+
+    public static void setUserRecovery(User userRecovery) {
+        UserController.userRecovery = userRecovery;
+    }
+
+    public boolean isRequestRecovery() {
+        return requestRecovery;
+    }
+
+    public void setRequestRecovery(boolean requestRecovery) {
+        UserController.requestRecovery = requestRecovery;
+    }
+
+    public boolean isSuccessRecovery() {
+        return successRecovery;
+    }
+
+    public void setSuccessRecovery(boolean successRecovery) {
+        UserController.successRecovery = successRecovery;
+    }
+
+    public boolean isFormRecovery() {
+        return formRecovery;
+    }
+
+    public void setFormRecovery(boolean formRecovery) {
+        UserController.formRecovery = formRecovery;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public String getUserEmailPassword() {
+        return userEmailPassword;
+    }
+
+    public void setUserEmailPassword(String userEmailPassword) {
+        this.userEmailPassword = userEmailPassword;
+    }
+
+    public List<User> getUserEmails() {
+        return userEmails;
+    }
+
+    public void setUserEmails(List<User> userEmails) {
+        this.userEmails = userEmails;
+    }
+
+    public User getUserItems() {
+        return userItems;
+    }
+
+    public void setUserItems(User userItems) {
+        this.userItems = userItems;
+    }
+
+    // Sending link @ user email that allowed reset password 
     public void recoverPassword() {
         System.out.println("Clicking on THIS ?!!?!?");
         User user = new User();
@@ -118,8 +234,8 @@ public class UserController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(
                     null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN,
-                            "Няма потребител с това име: " + selected.getUsername() + "!",
-                            "Моля, опитайте с друго име!"));
+                            "Invalid username: " + selected.getUsername() + "!",
+                            "Please try another!"));
             selected = null;
         } else {
             System.out.println("Потребителят иска да си смени паролата, изпращам Email до: " + user.getUserEmail());
@@ -127,7 +243,7 @@ public class UserController implements Serializable {
             subject = "Възстановяване на забравена парола";
             msg += "Здравейте " + user.getUsername() + "! \n";
             msg = "AsH C0d3 BloG\n На посоченият линк, ще може да въведете нова парола. "
-                    + "\n http://192.168.0.101:8080/myblog23/faces/recovery/crypted?username=" + user.getUsername() + "&hash=" + user.getPassword();
+                    + "\n http://192.168.0.101:8080/myblog23/faces/restfulservice/recovery/crypted?username=" + user.getUsername() + "&hash=" + user.getPassword();
             msg += "\n"
                     + "Системата все още се разработва. Възможно е да има несъответствия в данните.";
 
@@ -149,7 +265,48 @@ public class UserController implements Serializable {
             }
         }
     }
+    //Reset Password Method
+    public void renewPasswordForgotten() {
+        if (selected.getPassword() != null) {
+            boolean success = false;
+            List<User> userList = ejbFacade.findByName(userRecovery.getUsername());
+            userRecovery.setUsername(userList.get(0).getUsername());
+            String hash = ShaConverter.generateHash(selected.getPassword());
+            userRecovery.setPassword(hash);
+            try {
+                ejbFacade.editUserPassword(userRecovery.getUsername(), hash);
+                success = true;
+            } catch (NullPointerException e) {
+                success = false;
+            }
+            if (success) {
+                FacesContext.getCurrentInstance().addMessage(
+                        null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                "Your password has been changed!" + userRecovery.getUsername() + "!",
+                                "Please 'Log in'!"));
+                successRecovery = true;
+                formRecovery = false;
+                selected = new User();
+            } else {
+                FacesContext.getCurrentInstance().addMessage(
+                        null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                "A problem occurred!" + userRecovery.getUsername() + "!",
+                                "Please try again."));
+                selected = new User();
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(
+                    null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "A problem occurred!" + userRecovery.getUsername() + "!",
+                            "Please try again."));
+            selected = new User();
+        }
 
+    }
+    // Email Send Method
     private void sendEmail(String to, String sub, String msg, final String user, final String pass) {
         Properties props = new Properties();
 
@@ -178,28 +335,27 @@ public class UserController implements Serializable {
         }
 
     }
-
+    
+    // prepareRecovery Method
     public static void setSelectedForRecovery() {
         userRecovery = new User();
     }
 
     public User prepareRecovery() {
-        System.out.println("Mnogo stranno! Idvam li tuk??");
         selected = new User();
         return selected;
     }
 
-    // This method is used by Recovery Restfull for setting up option flag to true
     public static void setRecoveryOption(String username) {
         UserController uc = new UserController();
         uc.prepareRecovery();
         userRecovery.setUsername(username);
-        System.out.println("userRecovery: " + userRecovery.getUsername());
-
+        requestRecovery = true;
+        successRecovery = false;
+        formRecovery = true;
     }
 
     public User prepareCreate(ActionEvent event) {
-        System.out.println("Идвам ли в userController.prepareCreate?");
         selected = new User();
         initializeEmbeddableKey();
         return selected;
@@ -261,94 +417,7 @@ public class UserController implements Serializable {
         }
     }
 
-    public UserFacade getEjbFacade() {
-        return ejbFacade;
-    }
-
-    public void setEjbFacade(UserFacade ejbFacade) {
-        this.ejbFacade = ejbFacade;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public static User getUserRecovery() {
-        return userRecovery;
-    }
-
-    public static void setUserRecovery(User userRecovery) {
-        UserController.userRecovery = userRecovery;
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public String getUserEmailPassword() {
-        return userEmailPassword;
-    }
-
-    public void setUserEmailPassword(String userEmailPassword) {
-        this.userEmailPassword = userEmailPassword;
-    }
-
-    public List<User> getUserEmails() {
-        return userEmails;
-    }
-
-    public void setUserEmails(List<User> userEmails) {
-        this.userEmails = userEmails;
-    }
-
-    public User getUserItems() {
-        return userItems;
-    }
-
-    public void setUserItems(User userItems) {
-        this.userItems = userItems;
-    }
-
+ 
     public User getUser(java.lang.Integer id) {
         return getFacade().find(id);
     }

@@ -1,4 +1,4 @@
-com\ash\myblog23\restfulservice\MailSender$1.class
+com\ash\myblog23\restfulservice\ApplicationConfig.class
 com\ash\myblog23\model\User_.class
 com\ash\myblog23\pres\UserController.class
 com\ash\myblog23\restfulservice\RecoveryService.class
@@ -9,7 +9,6 @@ com\ash\myblog23\login\dao\LoginDAO.class
 com\ash\myblog23\login\beans\SessionUtils.class
 com\ash\myblog23\pres\UserController$UserControllerConverter.class
 com\ash\myblog23\pres\UserController$1.class
-com\ash\myblog23\restfulservice\MailSender.class
 com\ash\myblog23\model\User.class
 com\ash\myblog23\pres\PostBean.class
 com\ash\myblog23\control\UserFacade.class

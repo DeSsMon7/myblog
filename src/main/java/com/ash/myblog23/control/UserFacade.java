@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ash.myblog23.control;
 
 import com.ash.myblog23.model.User;
@@ -30,13 +25,14 @@ public class UserFacade extends AbstractFacade<User> {
     public UserFacade() {
         super(User.class);
     }
+
     public Number findLoggedUserId(String name) {
-        try{
-        return (Number) em.createQuery(
-                "SELECT u.id FROM User u WHERE u.username = :username")
-                .setParameter("username", name)
-                .getSingleResult();
-        } catch(NoResultException e){
+        try {
+            return (Number) em.createQuery(
+                    "SELECT u.id FROM User u WHERE u.username = :username")
+                    .setParameter("username", name)
+                    .getSingleResult();
+        } catch (NoResultException e) {
             return null;
         }
     }
@@ -49,17 +45,25 @@ public class UserFacade extends AbstractFacade<User> {
                 .getResultList();
         return result;
     }
-    
-    
+
     public List findByName(String name) {
         return em.createQuery(
                 "SELECT u FROM User u WHERE u.username LIKE :username")
                 .setParameter("username", name)
                 .getResultList();
     }
+
     @Override
     public List<User> findAll() {
         return em.createQuery("SELECT u FROM User u ORDER BY u.userEmail ASC")
                 .getResultList();
     }
+
+    public void editUserPassword(String username, String hash) {
+        em.createNativeQuery("UPDATE users SET password=?1 WHERE username=?2")
+                .setParameter(1, hash)
+                .setParameter(2, username)
+                .executeUpdate();
+    }
+
 }

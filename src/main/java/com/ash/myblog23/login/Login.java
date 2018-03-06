@@ -67,7 +67,7 @@ public class Login implements Serializable {
         boolean valid = LoginDAO.validate(username, passwordHash);
         Number resultUserId = ufacade.findLoggedUserId(username);
         if (resultUserId == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Потребителят не е намерен!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "User not found!"));
             return null;
         }
         if (resultUserId.longValue() >= 0) {
@@ -82,7 +82,7 @@ public class Login implements Serializable {
             FacesContext.getCurrentInstance().addMessage(
                     null,
                     new FacesMessage(FacesMessage.SEVERITY_INFO,
-                            "Здравей,",
+                            "Greetings,",
                             username));
             return "index?faces-redirect=true";
         } else {

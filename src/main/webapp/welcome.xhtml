@@ -144,6 +144,14 @@
 
 
         <ui:define name="body">
+            <h:form id="restClint">
+                
+                <p:inputText id="inputUserId" value="#{RestClient.userNumberField}"/>
+                <p:commandButton id="restBtn" actionListener="#{RestClient.call}" value="Submit"/>
+                
+                
+                
+            </h:form>
             <h:form id="PostListForm">
                 <p:dataScroller  id="datalist" value="#{postController.selected}" var="item" >
                     <p:panel header="#{item.title}"  style="margin: auto ; width: 50% ; padding: 10px; border-style: none " >
