@@ -12,20 +12,20 @@
                     margin: auto; width:50%; padding: 10em">
 
 
-                <p:panel header="Възстановяване на забравена парола" style="margin: auto; width:50%; padding: 10em">
+                <p:panel header="Forgotten Password" style="margin: auto; width:50%; padding: 10em">
                     <p:spacer rendered="#{!userController.requestRecovery}" height="20"/>
-                    <h:outputText rendered="#{!userController.requestRecovery}" style="font-family: sans-serif; font-size: 1em" value="Невалиден линк за възстановяване на парола!"/>
+                    <h:outputText rendered="#{!userController.requestRecovery}" style="font-family: sans-serif; font-size: 1em" value="Invalid request! Please try again."/>
                     <p:spacer rendered="#{!userController.requestRecovery}" height="20"/>
                     <br rendered="#{!userController.requestRecovery}"/>
                     <br rendered="#{!userController.requestRecovery}"/>
-                    <p:commandButton icon="ui-icon-home" rendered="#{!userController.requestRecovery}" value="Главно меню" action="/index.xhtml?faces-redirect=true"/>
+                    <p:commandButton icon="ui-icon-home" rendered="#{!userController.requestRecovery}" value="Home" action="/index.xhtml?faces-redirect=true"/>
 
                     <p:spacer rendered="#{userController.successRecovery}" height="20"/>
-                    <h:outputText rendered="#{userController.successRecovery}" style="font-family: sans-serif; font-size: 1em" value="Вашата парола е сменена успешно. Може да опитате да влезете в системата."/>
+                    <h:outputText rendered="#{userController.successRecovery}" style="font-family: sans-serif; font-size: 1em" value="Your password was successfully updated! Please sign up."/>
                     <p:spacer rendered="#{userController.successRecovery}" height="20"/>
                     <br rendered="#{userController.successRecovery}"/>
                     <br rendered="#{userController.successRecovery}"/>
-                    <p:commandButton icon="ui-icon-home" rendered="#{userController.successRecovery}" value="Главно меню" action="/index.xhtml?faces-redirect=true"/>
+                    <p:commandButton icon="ui-icon-home" rendered="#{userController.successRecovery}" value="Sign In" action="/index.xhtml?faces-redirect=true"/>
 
 
 
@@ -36,30 +36,30 @@
 
                         <p:password match="pwd2" 
                                     id="userPassword" 
-                                    placeholder="Въведете нова парола"
+                                    placeholder="Enter your new password"
                                     required="true" 
-                                    requiredMessage="Моля въведете парола!" 
+                                    requiredMessage="Please enter your new password!" 
 
                                     feedback="true"
-                                    weakLabel="Слаба" goodLabel="Добра" strongLabel="Силна"
+                                    weakLabel="Weak" goodLabel="Fair" strongLabel="Strong"
                                     value="#{userController.selected.password}"> 
                             <f:validateLength minimum="6" maximum="15"/>
                         </p:password>
 
                         <p:password id="pwd2"
                                     label="Password 2" 
-                                    placeholder="Повторете паролата"
+                                    placeholder="Confirm Password"
                                     feedback="true"
-                                    weakLabel="Слаба" goodLabel="Добра" strongLabel="Силна"
+                                    weakLabel="Weak" goodLabel="Fair" strongLabel="Strong"
                                     required="true" 
-                                    requiredMessage="Моля повторете паролата"
+                                    requiredMessage="Please confirm your password!"
                                     value="#{userController.selected.password}">
                             <f:validateLength minimum="6" maximum="15"/>
                         </p:password>
 
                         <p:commandButton icon="ui-icon-pencil" 
                                          actionListener="#{userController.renewPasswordForgotten}" 
-                                         value="Save" 
+                                         value="Update" 
                                          oncomplete="/welcome.xhtml?faces-redirect=true"/>  
                     </p:panelGrid>
                 </p:panel>

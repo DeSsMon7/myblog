@@ -13,12 +13,12 @@
             <div style="float: right; margin-top: -4px">
                 <h:form id="loginForm">
                     <p:commandButton id="loginButton" icon="ui-icon-circle-check"
-                                     value="Вход" oncomplete="PF('UserLoginDialog').show()"
+                                     value="Sign In" oncomplete="PF('UserLoginDialog').show()"
                                      />
                     <p:commandButton id="registerButton" icon="ui-icon-plus"  
-                                     value="Регистрация" action="#{userController.prepareCreate(event)}" 
+                                     value="Sign Up" action="#{userController.prepareCreate(event)}" 
                                      oncomplete="PF('UserRegisterDialog').show()" />
-                    <p:commandButton id="forgotPassButton" actionListener="#{userController.prepareCreate(event)}" icon="ui-icon-key" value="Забравена парола" 
+                    <p:commandButton id="forgotPassButton" actionListener="#{userController.prepareCreate(event)}" icon="ui-icon-key" value="Forgot Password?" 
                                      oncomplete="PF('UserForgotPasswordDialog').show()"/>
                 </h:form>
 
@@ -45,7 +45,7 @@
                                             label="Password" 
                                             requiredMessage="Please enter your password!"/>
                             </p:panelGrid>
-                            <p:commandButton action="#{login.validateUsernamePassword}" value="Вход" update="display,:growl" oncomplete="handleSubmit(args,'UserLoginDialog');"/>
+                            <p:commandButton action="#{login.validateUsernamePassword}" value="Sign In" update="display,:growl" oncomplete="handleSubmit(args,'UserLoginDialog');"/>
                             <p:commandButton value="Cancel" onclick="UserLoginDialog.hide()" />
                         </h:panelGroup>
                     </h:form>
@@ -124,18 +124,18 @@
                     <h:form id="UserForgotPasswordDialogForm">
                         <h:panelGroup id="display">
                             <p:panelGrid columns="1" >
-                                <h:outputText value="Моля, въведете потребителското си име и натиснете Готово. Изчакайте няколко секунди за да се покаже потвърдително съобщение." />
-                                <p:inputText id="username" 
-                                             required="true"
-                                             placeholder="Username"
-                                             requiredMessage="Please enter your username!   " 
-                                             validatorMessage="Вашето потребителско име трябва да е между 3 и 10 символа!"
-                                             value="#{userController.selected.username}">
-                                    <f:validateLength minimum="3" maximum="10" />
-                                </p:inputText>
-                                <h:outputText value="Системата ще ви изпрати E-mail с линк за възстановяване." />
+                                <h:outputText style="margin-right: 17px !important" value="Please enter your username and click 'Send'." />
+                                <p:inputText style="float: left !important;" id="username" 
+                                                     required="true"
+                                                     placeholder="Username"
+                                                     requiredMessage="Please enter your username!" 
+                                                     validatorMessage="Please enter a valid username!"
+                                                     value="#{userController.selected.username}">
+                                            <f:validateLength minimum="3" maximum="10" />
+                                        </p:inputText>
+                                <h:outputText value="You will receive an email to reset your password." />
                             </p:panelGrid>
-                            <p:commandButton icon="ui-icon-disk" actionListener="#{userController.recoverPassword()}" value="Готово" update=":growl"  oncomplete="handleSubmit(args,'UserForgotPasswordDialog');"/>                      
+                            <p:commandButton icon="ui-icon-disk" actionListener="#{userController.recoverPassword()}" value="Send" style="float: right !important" update=":growl"  oncomplete="handleSubmit(args,'UserForgotPasswordDialog');"/>                      
                         </h:panelGroup>
                     </h:form>
                 </p:dialog>
@@ -144,14 +144,6 @@
 
 
         <ui:define name="body">
-            <h:form id="restClint">
-                
-                <p:inputText id="inputUserId" value="#{RestClient.userNumberField}"/>
-                <p:commandButton id="restBtn" actionListener="#{RestClient.call}" value="Submit"/>
-                
-                
-                
-            </h:form>
             <h:form id="PostListForm">
                 <p:dataScroller  id="datalist" value="#{postController.selected}" var="item" >
                     <p:panel header="#{item.title}"  style="margin: auto ; width: 50% ; padding: 10px; border-style: none " >

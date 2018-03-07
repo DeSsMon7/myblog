@@ -28,3 +28,8 @@
 .ui-icon-custom {
     height: 15px !important;
 }
+
+.ui-panelgrid>*>tr,
+.ui-panelgrid .ui-panelgrid-cell {
+    border: none !important;
+}

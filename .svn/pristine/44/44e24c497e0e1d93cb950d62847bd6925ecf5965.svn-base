@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="/loginTemplate.xhtml">
+
+
+
+        <ui:define name="header">
+            <div style="float: right; margin-top: -4px">
+                <h:form id="loginForm">
+                    <p:commandButton id="loginButton" icon="ui-icon-circle-check"
+                                     value="Вход" oncomplete="PF('UserLoginDialog').show()"
+                                     />
+                    <p:commandButton id="registerButton" icon="ui-icon-plus"  
+                                     value="Регистрация" action="#{userController.prepareCreate(event)}" 
+                                     oncomplete="PF('UserRegisterDialog').show()" />
+                    <p:commandButton id="forgotPassButton" actionListener="#{userController.prepareCreate(event)}" icon="ui-icon-key" value="Забравена парола" 
+                                     oncomplete="PF('UserForgotPasswordDialog').show()"/>
+                </h:form>
+
+                <p:dialog showEffect="fade"
+                          id="UserLoginDlg" 
+                          widgetVar="UserLoginDialog" 
+                          modal="true" 
+                          resizable="false" 
+                          appendTo="@(body)" 
+                          header="#{msgs_en.CreateUserTitle}">
+                    <h:form id="UserLoginForm">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" >
+                                <p:outputLabel for="username" value="Username: "/>
+                                <p:inputText id="username" required="true" 
+                                             label="Username"
+                                             requiredMessage="Please enter your username!" 
+                                             value="#{login.username}"/>
+
+                                <h:outputLabel  for="pwd1" value="Password: "/>
+                                <p:password id="pwd1"
+                                            required="true"
+                                            value="#{login.password}" 
+                                            label="Password" 
+                                            requiredMessage="Please enter your password!"/>
+                            </p:panelGrid>
+                            <p:commandButton action="#{login.validateUsernamePassword}" value="Вход" update="display,:growl" oncomplete="handleSubmit(args,'UserLoginDialog');"/>
+                            <p:commandButton value="Cancel" onclick="UserLoginDialog.hide()" />
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+
+                <p:dialog showEffect="fade"
+                          id="UserRegisterDlg" 
+                          widgetVar="UserRegisterDialog" 
+                          modal="true" 
+                          resizable="false" 
+                          appendTo="@(body)" 
+                          header="#{msgs_en.CreateUserTitle}">
+                    <h:form id="UserRegisterForm">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="2" >
+                                <p:outputLabel value="Username" for="username" />
+                                <p:inputText id="username" 
+                                             required="true" 
+                                             requiredMessage="Please enter your username!" 
+                                             value="#{userController.selected.username}" 
+                                             title="Username" validatorMessage="Username cannot contain whitespaces, dash or hyphen" >
+                                    <f:validateLength minimum="3" maximum="10" />
+                                    <f:validateRegex pattern="[\p{L}\p{N}]*" for="username" />
+                                </p:inputText>
+
+                                <p:outputLabel value="Password" for="userPassword" />
+                                <p:password match="pwd2" 
+                                            id="userPassword" 
+                                            required="true" 
+                                            requiredMessage="Please enter your password" 
+                                            value="#{userController.selected.password}" 
+                                            title="password" feedback="true" promptLabel="Password Strenght"
+                                            weakLabel="Weak" goodLabel="Fair" strongLabel="Strong" validatorMessage="The Password must be atleast 8 characters long and
+                                            composed of UPPERCASE letters, lowercase letters and digits(0-9)!">
+                                    <f:validateLength minimum="6" maximum="25"/>
+                                    <f:validateRegex pattern="^((?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,25})" for="userPassword" />
+                                </p:password>
+
+                                <h:outputLabel  for="pwd2" value="Confirm Password" />
+                                <p:password id="pwd2"
+                                            required="true" 
+                                            value="#{userController.selected.password}" 
+                                            label="Password 2" 
+                                            requiredMessage="Please confirm your password">
+                                    <f:validateLength minimum="6" maximum="25"/>
+                                    <f:validateRegex pattern="^((?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,25})" for="pwd2" />
+                                </p:password>
+                                <p:outputLabel value="Email " for="userEmail" />
+                                <p:inputText 
+                                    id="userEmail" 
+                                    required="true" 
+                                    value="#{userController.selected.userEmail}" 
+                                    title="Enter valid email"
+                                    requiredMessage="Please enter valid email" >
+                                    <f:validateLength for="userEmail" minimum="1" maximum="30"/>
+                                    <f:validateRegex pattern="^[^@]+@[^@]+\.[^@]+$" for="userEmail" />
+                                </p:inputText>
+
+
+
+                            </p:panelGrid>
+                            <div style="float: right">
+                                <p:commandButton actionListener="#{userController.create}" value="Register" update="display,:growl" oncomplete="handleSubmit(args,'UserRegisterDialog');"/>
+                                <p:commandButton value="Cancel" onclick="UserRegisterDialog.hide()"/>
+                            </div>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+                <p:dialog showEffect="fade"
+                          id="UserForgotPasswordDialog" 
+                          widgetVar="UserForgotPasswordDialog" 
+                          modal="true" 
+                          resizable="false" 
+                          appendTo="@(body)" 
+                          header="Forgotten Password">
+                    <h:form id="UserForgotPasswordDialogForm">
+                        <h:panelGroup id="display">
+                            <p:panelGrid columns="1" >
+                                <h:outputText value="Моля, въведете потребителското си име и натиснете Готово. Изчакайте няколко секунди за да се покаже потвърдително съобщение." />
+                                <p:inputText id="username" 
+                                             required="true"
+                                             placeholder="Username"
+                                             requiredMessage="Please enter your username!   " 
+                                             validatorMessage="Вашето потребителско име трябва да е между 3 и 10 символа!"
+                                             value="#{userController.selected.username}">
+                                    <f:validateLength minimum="3" maximum="10" />
+                                </p:inputText>
+                                <h:outputText value="Системата ще ви изпрати E-mail с линк за възстановяване." />
+                            </p:panelGrid>
+                            <p:commandButton icon="ui-icon-disk" actionListener="#{userController.recoverPassword()}" value="Готово" update=":growl"  oncomplete="handleSubmit(args,'UserForgotPasswordDialog');"/>                      
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>
+            </div>
+        </ui:define>
+
+
+        <ui:define name="body">
+            <h:form id="PostListForm">
+                <p:dataScroller  id="datalist" value="#{postController.selected}" var="item" >
+                    <p:panel header="#{item.title}"  style="margin: auto ; width: 50% ; padding: 10px; border-style: none " >
+                        <p:spacer height="20px"/>
+                        <h:outputText value="#{item.content}" escape="false"/>
+                        <br/>
+                        <h:outputText value="Published by " style="font-weight: bold"/>
+                        <h:outputText value="#{item.usersId.username}" style="color: blue"/>
+                        <p:spacer height="20px"/>
+                        <h:outputText value="on" style="font-weight: bold" /> <p:spacer height="10px"/>
+                        <h:outputText  value="#{item.postDate}" style="color: red">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                        </h:outputText>
+                        <p:separator />
+                    </p:panel>
+                    <br/>
+                    <hr style="width: 100%"/>
+                    <br/>
+                </p:dataScroller>
+            </h:form>    
+        </ui:define>
+
+
+        <ui:define name="leftMenuForm">
+            <h:form id="PostViewForm">
+                <p:dataList value="#{postController.items}" var="item" type="definition" itemType="none" rows="5" styleClass="paginated">
+                    <f:facet name="header">
+                        Latest Posts
+                    </f:facet>
+                    <p:panelGrid columns="3" style="border-style: hidden">
+                        <p:commandLink update=":PostListForm" title="View Detail" styleClass="ui-icon ui-icon-search" style="display: block; float:left ; margin: 0 2px">
+                            <f:setPropertyActionListener value="#{item}" target="#{postController.selected}" />
+                            <h:outputText  style="display: block;"  value="#{item.title}, #{item.usersId.username}" />
+                        </p:commandLink>
+                        <h:outputText value="#{item.title}, #{item.usersId.username}" style=" display:block; " />
+                    </p:panelGrid>
+                </p:dataList> 
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+</html>
