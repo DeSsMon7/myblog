@@ -241,11 +241,12 @@ public class UserController implements Serializable {
             System.out.println("Потребителят иска да си смени паролата, изпращам Email до: " + user.getUserEmail());
             to = user.getUserEmail();
             subject = "Възстановяване на забравена парола";
-            msg += "Здравейте " + user.getUsername() + "! \n";
-            msg = "AsH C0d3 BloG\n На посоченият линк, ще може да въведете нова парола. "
-                    + "\n http://192.168.0.101:8080/myblog23/faces/restfulservice/recovery/crypted?username=" + user.getUsername() + "&hash=" + user.getPassword();
-            msg += "\n"
-                    + "Системата все още се разработва. Възможно е да има несъответствия в данните.";
+            msg = "<span><h2 style=\"color: red; float:left\">Здравейте, " + user.getUsername() + "!</h2>" 
+                    + "</br><img src=\"http://accounts.abs-cbn.com/Content/assets/img/question-mark.png\" style=\"width: 200px; height: 200px\"></span><br>";
+            msg += "<br><p style=\"font-style: italic\">На посоченият линк, ще може да въведете нова парола.</p><br/>";
+            msg += "http://192.168.0.101:8080/myblog23/faces/restfulservice/recovery/crypted?username="  + user.getUsername() +  "&hash=" + user.getPassword();
+            msg += "<br>Системата все още се разработва. Възможно е да има несъответствия в данните.<br> <h3><i>AsH C0d3 BloG</i></h3>";
+                    
 
             System.out.println("SEND EMAIL to " + user.getUserEmail());
             try {
@@ -328,7 +329,7 @@ public class UserController implements Serializable {
             message.setFrom(new InternetAddress(user));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             message.setSubject(sub);
-            message.setText(msg);
+            message.setContent(msg, "text/html ; charset=utf-8");
             Transport.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
