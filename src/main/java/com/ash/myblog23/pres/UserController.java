@@ -62,6 +62,9 @@ public class UserController implements Serializable {
     private static boolean formRecovery;
     private static User userRecovery;
 
+    private static final String DIV_A = "<div style=\"background-color: blue\">"; 
+    private static final String DIV_B = "</div>"; 
+    
     public UserController() {
     }
 
@@ -241,10 +244,10 @@ public class UserController implements Serializable {
             System.out.println("Потребителят иска да си смени паролата, изпращам Email до: " + user.getUserEmail());
             to = user.getUserEmail();
             subject = "Възстановяване на забравена парола";
-            msg = "<span><h2 style=\"color: red; float:left\">Здравейте, " + user.getUsername() + "!</h2>" 
-                    + "</br><img src=\"http://accounts.abs-cbn.com/Content/assets/img/question-mark.png\" style=\"width: 200px; height: 200px\"></span><br>";
+            msg = DIV_A + "<span><h2 style=\"color: red; float:left\">Здравейте, " + user.getUsername() + "!</h2>"
+                    + "</br><img src=\"http://accounts.abs-cbn.com/Content/assets/img/question-mark.png\" style=\"width: 200px; height: 200px\"></span>" + DIV_B + "<br>";
             msg += "<br><p style=\"font-style: italic\">На посоченият линк, ще може да въведете нова парола.</p><br/>";
-            msg += "http://192.168.0.101:8080/myblog23/faces/restfulservice/recovery/crypted?username="  + user.getUsername() +  "&hash=" + user.getPassword();
+            msg += "http://192.168.0.101:8080/myblog23/faces/restfulservice/recovery/crypted?username=" + user.getUsername() + "&hash=" + user.getPassword();
             msg += "<br>Системата все още се разработва. Възможно е да има несъответствия в данните.<br> <h3><i>AsH C0d3 BloG</i></h3>";
                     
 
