@@ -54,6 +54,9 @@ public class User implements Serializable {
     @Size(min = 6, max = 100)
     @Column(name = "user_email")
     private String userEmail;
+    @Size(min = 1, max = 2147483647)
+    @Column(name = "user_avatar")
+    private String userAvatar;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usersId")
     private List<Post> postList;
 
@@ -101,6 +104,14 @@ public class User implements Serializable {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getUserAvatar() {
+        return userAvatar;
+    }
+
+    public void setUserAvatar(String userAvatar) {
+        this.userAvatar = userAvatar;
     }
 
     @XmlTransient
