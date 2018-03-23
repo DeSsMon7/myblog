@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <h:head>
+        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+        <title><h:outputText value="#{msgs_EN.AppName}"/></title>
+        <h:outputStylesheet library="css" name="jsfcrudmyblog.css"/>
+        <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputScript library="js" name="jsfcrud.js"/>
+    </h:head>
+
+    <h:body>
+
+        <p:growl id="growl" life="3000" showDetail="true"/>
+        <p:layout fullPage="true">
+
+            <p:layoutUnit position="north" size="65" header="#{msgs_EN.AppName}"  >
+                <ui:insert name="header" >
+                    <h:form id="menuForm">
+                        <p:menubar>
+                            <p:menuitem value="#{msgs_EN.Home}" outcome="/index" icon="ui-icon-home"/>
+                            <p:submenu label="Greetings,   #{login.username}" icon="ui-icon-person" binding="/user/Profile" style="float: right">
+                                <p:menuitem value="Post" outcome="/post/List.xhtml" />
+                                <p:menuitem value="User" outcome="/user/List.xhtml" />
+                                <p:menuitem value="Create post" outcome="/post/createPostForm.xhtml" />
+                                <p:separator/>
+                                <p:menuitem icon="ui-icon-power" value="Logout" outcome="/welcome.xhtml" actionListener="#{login.logout(e)}" />
+                            </p:submenu>
+                        </p:menubar>
+                    </h:form>
+                </ui:insert>
+            </p:layoutUnit>
+
+
+            <p:layoutUnit position="south" size="40">
+                <h:outputText style="font-family: string;font-size: 15px; float: right;margin-top: 5px;margin-right: 10px;" value="TimataEdition© 2017">
+                </h:outputText> 
+
+                <span style="font-family: fantasy; font-size: 18px;padding-left: 5px">
+                    <a href="http://localhost:8080/myblog23/faces/welcome.xhtml" style="color: steelblue"> bbm™</a>
+                </span>
+            </p:layoutUnit>
+
+
+            <p:layoutUnit position="west" size="270" header="Category" collapsible="true">
+                <ui:insert name="leftMenuForm" />
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" style="text-align: center" >
+                        <ui:insert name="postContent"/>
+            </p:layoutUnit>
+
+        </p:layout>
+
+    </h:body>
+
+
+</html>
+

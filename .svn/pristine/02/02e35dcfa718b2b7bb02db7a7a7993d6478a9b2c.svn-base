@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="#{msgs_en.ListUserTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <p:spacer height="20"/>
+
+            <h:form id="UserListForm">
+                <p:fieldset legend="Информация за Профила" style="float:left; width: 60em;margin-left: 5em">
+                    <p:panelGrid columns="1" style="float: left">
+                        <p:inputText id="userId" value="#{userController.selected.id}" title="Вашето пълно име, с което програмата ще се обръща към вас."/>
+                        <p:tooltip id="toolTipFocus" for="userName"  />
+                        <p:inputText id="userName" disabled="true" value="#{userController.selected.username}" title="Потребителското ви име е уникално и не може да бъде променено след регистрация."/>
+                        <p:inputText id="userEmail" value="#{userController.selected.userEmail}" title="E-mail адрес, валиден за да може да получавате правилни известия!"/>
+                        <p:tooltip for="userEmail" />
+                        <p:inputText id="userPic" value="#{userController.selected.userAvatar}" title="Вашето изображение за сега не се използва. По-късно ще участва в личният чат, с който ще водите комуникация с други водачи, с опция да бъде изключено." />
+                        <p:tooltip for="userPic"/>
+                        <p:commandButton style="padding: 5px" value="Редактирай"/>
+                    </p:panelGrid>
+                    <p:graphicImage style="width: 30%; float: right" url="#{userController.selected.userAvatar == null ? 'https://i.imgur.com/nzhiz05.png' : (useController.selected.userAvatar)}" alt="Липсва Изображение" />
+                </p:fieldset>
+
+        </ui:define>
+    </ui:composition>
+
+</html>
