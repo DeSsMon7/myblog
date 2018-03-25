@@ -33,3 +33,7 @@
 .ui-panelgrid .ui-panelgrid-cell {
     border: none !important;
 }
+
+#userProfileId>*>tr, .ui-inputfield {
+    width: 300px !important;
+}

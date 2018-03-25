@@ -8,6 +8,7 @@
     <h:head>
         <title><ui:insert name="title">#{msgs_EN.ListPostTitle}"</ui:insert></title>
         <h:outputStylesheet library="css" name="jsfcrud.css"/>
+        <h:outputStylesheet library="css" name="jsfcrudmyblog.css"/>
         <h:outputScript library="js" name="jsfcrud.js"/>
     </h:head>
 
@@ -16,7 +17,7 @@
         <p:growl id="growl" life="3000" showDetail="true" />
 
         <p:layout fullPage="true">
-             <p:layoutUnit position="north" size="65" header="My Blog"  >
+            <p:layoutUnit position="north" size="65" header="My Blog"  >
                 <ui:insert name="header" >
                     <h:form id="menuForm">
                         <p:menubar>
