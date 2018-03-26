@@ -25,7 +25,7 @@
                         <p:tooltip for="userEmail" />
                         <p:inputText id="userPic"  value="#{userController.userProfile.userAvatar}" title="Вашето изображение за сега не се използва. По-късно ще участва в коментари." />
                         <p:tooltip for="userPic"/>
-                        <p:commandButton style="padding: 5px; float: right" value="Редактирай" />
+                        <p:commandButton style="padding: 5px; float: right" value="Редактирай"  actionListener="#{userController.updateUserProfile()}" update=":UserListForm, :growl"/>
                     </p:panelGrid>
                     <p:graphicImage style="width: 30%;height: 30% ;float: right" value="#{userController.userProfile.userAvatar}" alt="Липсва Изображение" />
                 </p:fieldset>
