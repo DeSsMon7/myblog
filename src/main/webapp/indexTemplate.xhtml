@@ -25,9 +25,8 @@
                         <p:menubar>
                             <p:menuitem value="#{msgs_EN.Home}" outcome="/index" icon="ui-icon-home"/>
                             <p:submenu label="Greetings,   #{login.username}" icon="ui-icon-person" style="float: right">
-                                <p:menuitem value="Post" outcome="/post/List.xhtml" />
-                                <p:menuitem value="User" action="/user/Profile" />
-                                <p:menuitem value="Create post" outcome="/post/createPostForm.xhtml" />
+                                <p:menuitem value="User Profile" action="/user/Profile" />
+                                <p:menuitem value="Create post" action="/post/createPostForm.xhtml" />
                                 <p:separator/>
                                 <p:menuitem icon="ui-icon-power" value="Logout" outcome="/welcome.xhtml" actionListener="#{login.logout(e)}" />
                             </p:submenu>
