@@ -45,8 +45,8 @@
                                             label="Password" 
                                             requiredMessage="Please enter your password!"/>
                             </p:panelGrid>
-                            <p:commandButton action="#{login.validateUsernamePassword}" value="Sign In" update=":growl" oncomplete="handleSubmit(args,'UserLoginDialog');"/>
-                            <p:commandButton value="Cancel" onclick="UserLoginDialog.hide()" />
+                            <p:commandButton action="#{login.validateUsernamePassword}" value="Sign In" style="float: right !important" update=":growl" oncomplete="handleSubmit(args,'UserLoginDialog');"/>
+                            <p:commandButton value="Cancel" style="float: right !important" onclick="UserLoginDialog.hide()" />
                         </h:panelGroup>
                     </h:form>
                 </p:dialog>
@@ -108,7 +108,7 @@
 
                             </p:panelGrid>
                             <div style="float: right">
-                                <p:commandButton actionListener="#{userController.create}" value="Register" update="display,:growl" oncomplete="handleSubmit(args,'UserRegisterDialog');"/>
+                                <p:commandButton actionListener="#{userController.create}" value="Submit" update="display,:growl" oncomplete="handleSubmit(args,'UserRegisterDialog');"/>
                                 <p:commandButton value="Cancel" onclick="UserRegisterDialog.hide()"/>
                             </div>
                         </h:panelGroup>
