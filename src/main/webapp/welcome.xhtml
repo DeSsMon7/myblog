@@ -45,8 +45,10 @@
                                             label="Password" 
                                             requiredMessage="Please enter your password!"/>
                             </p:panelGrid>
-                            <p:commandButton action="#{login.validateUsernamePassword}" value="Sign In" style="float: right !important" update=":growl" oncomplete="handleSubmit(args,'UserLoginDialog');"/>
-                            <p:commandButton value="Cancel" style="float: right !important" onclick="UserLoginDialog.hide()" />
+                            <div style="float: right">
+                                <p:commandButton action="#{login.validateUsernamePassword}" value="Sign In" style="float: right !important" update=":growl" oncomplete="handleSubmit(args,'UserLoginDialog');"/>
+                                <p:commandButton value="Cancel" style="float: right !important" onclick="UserLoginDialog.hide()" />
+                            </div>
                         </h:panelGroup>
                     </h:form>
                 </p:dialog>
@@ -126,13 +128,13 @@
                             <p:panelGrid columns="1" >
                                 <h:outputText style="margin-right: 17px !important" value="Please enter your username and click 'Send'." />
                                 <p:inputText style="float: left !important;" id="username" 
-                                                     required="true"
-                                                     placeholder="Username"
-                                                     requiredMessage="Please enter your username!" 
-                                                     validatorMessage="Please enter a valid username!"
-                                                     value="#{userController.selected.username}">
-                                            <f:validateLength minimum="3" maximum="10" />
-                                        </p:inputText>
+                                             required="true"
+                                             placeholder="Username"
+                                             requiredMessage="Please enter your username!" 
+                                             validatorMessage="Please enter a valid username!"
+                                             value="#{userController.selected.username}">
+                                    <f:validateLength minimum="3" maximum="10" />
+                                </p:inputText>
                                 <h:outputText value="You will receive an email to reset your password." />
                             </p:panelGrid>
                             <p:commandButton icon="ui-icon-disk" actionListener="#{userController.recoverPassword()}" value="Send" style="float: right !important" update=":growl"  oncomplete="handleSubmit(args,'UserForgotPasswordDialog');"/>                      
