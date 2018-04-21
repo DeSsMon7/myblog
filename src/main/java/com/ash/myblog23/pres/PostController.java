@@ -79,10 +79,6 @@ public class PostController implements Serializable {
         items = null;
         if (items == null) {
             items = getFacade().findAllOrdered();
-     //      for (int i = 0; i < items.size(); i++) {
-      //          System.out.println(i + ". " + items.get(i).getTitle() + dateFormat.format(items.get(i).getDate()));
-        //        
-           // }
         }
         return items;
     }

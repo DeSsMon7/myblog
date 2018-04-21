@@ -49,9 +49,7 @@ public class PostBean implements Serializable {
         System.out.println("Setting user id as default: " + userId);
         System.out.println("Извикване на метод за пълнене в базата...");
         try {
-            System.out.println("Post Created!" + postDate);
             postFacade.createPost(postTitle, postContent, postDate, userId);
-            System.out.println("Post Created!" + postDate);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Post Created!", postTitle));
         } catch (RollbackException e) {
             System.out.println("Cannot create Post: " + e);

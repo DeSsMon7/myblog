@@ -255,7 +255,6 @@ public class UserController implements Serializable {
 
     // Sending link @ user email that allowed reset password 
     public void recoverPassword() {
-        System.out.println("Clicking on THIS ?!!?!?");
         User user = new User();
         List<User> findAll = ejbFacade.findAll();
         boolean userExists = false;
