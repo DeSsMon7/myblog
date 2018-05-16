@@ -16,63 +16,50 @@
             <p:spacer height="20"/>
 
             <h:form id="UserListForm" style="float: left">
-                <p:fieldset legend="Profile Details" style="float:left; width: 60em;margin-left: 5em">
-                    <p:panelGrid columns="1"  style="float: left;width: 45% !important">
-                        <p:inputText id="userProfileId" disabled="true" value="#{userController.userProfile.id}" title="Вашето пълно име, с което програмата ще се обръща към вас."/>
-                        <p:tooltip id="toolTipFocus" for="userName"  />
-                        <p:inputText id="userName" disabled="true" value="#{userController.userProfile.username}" title="Потребителското ви име е уникално и не може да бъде променено след регистрация."/>
-                        <p:inputText id="userEmail" value="#{userController.userProfile.userEmail}" title="E-mail адрес, валиден за да може да получавате правилни известия!"/>
-                        <p:tooltip for="userEmail" />
-                        <p:inputText id="userPic"  value="#{userController.userProfile.userAvatar}" title="Вашето изображение за сега не се използва. По-късно ще участва в коментари." />
-                        <p:tooltip for="userPic"/>
-                        <p:commandButton style="padding: 5px; float: right" value="Редактирай"  actionListener="#{userController.updateUserProfile()}" update=":UserListForm, :growl"/>
-                    </p:panelGrid>
-                    <p:graphicImage style="width: 30%;height: 30% ;float: right" value="#{userController.userProfile.userAvatar}" alt="Липсва Изображение" />
-                </p:fieldset>
-            </h:form>
-            <h:form>              
-                <p:fieldset legend="Your Posts" style="float:right; width: 60em;margin-left: 5em">
-                    <p:panelGrid>
-                        <p:dataTable id="datalist" value="#{postController.items}" var="item"
-                                     paginator="true"
-                                     rowKey="#{item.id}"
-                                     rows="10"
-                                     rowsPerPageTemplate="10,20,30,40,50">
-                            <p:column rowspan="2">
-                                <f:facet name="header">
-                                    <h:outputText value="#{msgs_EN.ListPostTitle_id}"/>
-                                </f:facet>
-                                <h:outputText value="#{item.id}"/>
-                            </p:column>
-                            <p:column rowspan="2">
-                                <f:facet name="header">
-                                    <h:outputText value="#{msgs_EN.ListPostTitle_title}"/>
-                                </f:facet>
-                                <h:outputText value="#{item.title}"/>
-                            </p:column>
-                            <p:column rowspan="1">
-                                <f:facet name="header">
-                                    <h:outputText value="#{msgs_EN.ListPostTitle_content}"/>
-                                </f:facet>
-                                <h:outputText value="#{item.content}"/>
-                            </p:column>
-                            <p:column rowspan="3">
-                                <f:facet name="header">
-                                    <h:outputText value="#{msgs_EN.ListPostTitle_postDate}"/>
-                                </f:facet>
-                                <h:outputText value="#{item.postDate}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column rowspan="3">
-                                <f:facet name="header">
-                                    <h:outputText value="#{msgs_EN.ListPostTitle_usersId}"/>
-                                </f:facet>
-                                <h:outputText value="#{item.usersId.username}"/>
-                            </p:column>
-                        </p:dataTable>
-                    </p:panelGrid>
-                </p:fieldset>
+                <p:tabView dynamic="true" cache="true" effect="clip">
+                    <p:tab title="Profile">
+                        <p:fieldset class="ui-border-hidden">
+                            <p:panelGrid columns="1"  style="float: left;width: 45% !important">
+                                <p:inputText id="userProfileId" disabled="true" value="#{userController.userProfile.id}" title="Вашето пълно име, с което програмата ще се обръща към вас."/>
+                                <p:tooltip id="toolTipFocus" for="userName"  />
+                                <p:inputText id="userName" disabled="true" value="#{userController.userProfile.username}" title="Потребителското ви име е уникално и не може да бъде променено след регистрация."/>
+                                <p:inputText id="userEmail" value="#{userController.userProfile.userEmail}" title="E-mail адрес, валиден за да може да получавате правилни известия!"/>
+                                <p:tooltip for="userEmail" />
+                                <p:inputText id="userPic"  value="#{userController.userProfile.userAvatar}" title="Вашето изображение за сега не се използва. По-късно ще участва в коментари." />
+                                <p:tooltip for="userPic"/>
+                                <p:commandButton style="padding: 5px; float: right" value="Update"  actionListener="#{userController.updateUserProfile()}" update=":UserListForm, :growl"/>
+                            </p:panelGrid>
+                            <p:graphicImage style="width: 30%;height: 30% ;float: right" value="#{userController.userProfile.userAvatar}" alt="Липсва Изображение" />
+                        </p:fieldset>
+                    </p:tab>
+                    <p:tab title="Posts">
+                        <p:fieldset class="ui-border-hidden">
+                            <p:panelGrid columns="1">
+                                <p:dataTable id="datalist" value="#{postController.items}" var="item"
+                                             paginator="true"
+                                             rowKey="#{item.id}"
+                                             rows="10"
+                                             rowsPerPageTemplate="10,20,30,40,50"
+                                           >
+                                    <p:column headerText="#{msgs_EN.ListPostTitle_id}" >
+                                        <h:outputText value="#{item.id}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msgs_EN.ListPostTitle_title}">
+                                        <h:outputText value="#{item.title}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msgs_EN.ListPostTitle_postDate}">
+                                        <h:outputText value="#{item.postDate}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="#{msgs_EN.ListPostTitle_usersId}">
+                                        <h:outputText value="#{item.usersId.username}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>
+                        </p:fieldset>
+                    </p:tab>
+                </p:tabView>
             </h:form>
         </ui:define>
     </ui:composition>

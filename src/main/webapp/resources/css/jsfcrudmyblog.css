@@ -37,3 +37,7 @@
 #userProfileId>*>tr, .ui-inputfield {
     width: 300px !important;
 }
+
+.ui-border-hidden {
+    border-style: none !important;
+}
