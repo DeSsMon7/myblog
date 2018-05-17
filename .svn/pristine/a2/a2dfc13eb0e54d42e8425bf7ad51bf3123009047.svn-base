@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/template.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Настройки на Профил"></h:outputText>
+        </ui:define>
+
+        <ui:define name="body">
+            <p:spacer height="20"/>
+
+            <h:form id="UserListForm" style="float: left">
+                <p:tabView dynamic="true" cache="true" effect="clip">
+                    <p:tab title="Profile">
+                        <p:fieldset class="ui-border-hidden">
+                            <p:panelGrid columns="1"  style="float: left;width: 45% !important">
+                                <p:inputText id="userProfileId" disabled="true" value="#{userController.userProfile.id}" title="Вашето пълно име, с което програмата ще се обръща към вас."/>
+                                <p:tooltip id="toolTipFocus" for="userName"  />
+                                <p:inputText id="userName" disabled="true" value="#{userController.userProfile.username}" title="Потребителското ви име е уникално и не може да бъде променено след регистрация."/>
+                                <p:inputText id="userEmail" value="#{userController.userProfile.userEmail}" title="E-mail адрес, валиден за да може да получавате правилни известия!"/>
+                                <p:tooltip for="userEmail" />
+                                <p:inputText id="userPic"  value="#{userController.userProfile.userAvatar}" title="Вашето изображение за сега не се използва. По-късно ще участва в коментари." />
+                                <p:tooltip for="userPic"/>
+                                <p:commandButton style="padding: 5px; float: right" value="Update"  actionListener="#{userController.updateUserProfile()}" update=":UserListForm, :growl"/>
+                            </p:panelGrid>
+                            <p:graphicImage style="width: 30%;height: 30% ;float: right" value="#{userController.userProfile.userAvatar}" alt="Липсва Изображение" />
+                        </p:fieldset>
+                    </p:tab>
+                    <p:tab title="Posts">
+                        <p:fieldset class="ui-border-hidden">
+                            <p:panelGrid columns="1">
+                                <p:dataTable id="datalist" value="#{postController.userPosts}" var="item"
+                                             paginator="true"
+                                             rowKey="#{item.id}"
+                                             rows="10"
+                                             rowsPerPageTemplate="10,20,30,40,50"
+                                           >
+                                    <p:column headerText="#{msgs_EN.ListPostTitle_id}" >
+                                        <h:outputText value="#{item.id}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msgs_EN.ListPostTitle_title}">
+                                        <h:outputText value="#{item.title}"/>
+                                    </p:column>
+                                    <p:column headerText="#{msgs_EN.ListPostTitle_postDate}">
+                                        <h:outputText value="#{item.postDate}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="#{msgs_EN.ListPostTitle_usersId}">
+                                        <h:outputText value="#{item.usersId.username}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panelGrid>
+                        </p:fieldset>
+                    </p:tab>
+                </p:tabView>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>
