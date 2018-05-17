@@ -4,8 +4,10 @@ import com.ash.myblog23.model.Post;
 import com.ash.myblog23.pres.util.JsfUtil;
 import com.ash.myblog23.pres.util.JsfUtil.PersistAction;
 import com.ash.myblog23.control.PostFacade;
+import com.ash.myblog23.login.beans.SessionUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -18,6 +20,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.servlet.http.HttpSession;
 
 @Named("postController")
 @SessionScoped
@@ -26,8 +29,10 @@ public class PostController implements Serializable {
     @EJB
     private com.ash.myblog23.control.PostFacade ejbFacade;
     private List<Post> items = null;
+    private List<Post> userPosts = null;
     private Post selected;
-    
+    private HttpSession session;
+
     public PostController() {
     }
 
@@ -109,6 +114,13 @@ public class PostController implements Serializable {
                 JsfUtil.addErrorMessage(ex, ResourceBundle.getBundle("/msgs_EN").getString("PersistenceErrorOccured"));
             }
         }
+    }
+
+    public List<Post> getUserPosts() {
+        session = SessionUtils.getSession();
+        Integer usersId = (Integer) session.getAttribute("usersId");
+        userPosts = getFacade().findPostByUserId(usersId);
+        return userPosts;
     }
 
     public Post getPost(java.lang.Integer id) {

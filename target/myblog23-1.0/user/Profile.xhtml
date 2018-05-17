@@ -35,7 +35,7 @@
                     <p:tab title="Posts">
                         <p:fieldset class="ui-border-hidden">
                             <p:panelGrid columns="1">
-                                <p:dataTable id="datalist" value="#{postController.items}" var="item"
+                                <p:dataTable id="datalist" value="#{postController.userPosts}" var="item"
                                              paginator="true"
                                              rowKey="#{item.id}"
                                              rows="10"

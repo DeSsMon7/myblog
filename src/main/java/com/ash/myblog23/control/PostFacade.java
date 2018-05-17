@@ -50,4 +50,12 @@ public class PostFacade extends AbstractFacade<Post> {
                 .getResultList();
         return result;
     }
+    
+        public List findPostByUserId(Integer id){
+        List result = (List) em.createQuery("SELECT p FROM Post p WHERE p.usersId.id = :usersId")
+                .setParameter("usersId", id)
+                .getResultList();
+        return result;
+    }
+    
 }
